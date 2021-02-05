@@ -4,6 +4,8 @@ import seaborn as sb
 import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 from DataCollector import DataCollector
+from LOFHandler import LOFHandler
+from KNNOHandler import KNNOHandler
 from isolationForestHandler import IsolationForestHandler
 
 dc = DataCollector(False)
@@ -34,10 +36,10 @@ if exec_chart_anom:
     path_to_plt = '../outs/charts/anomalies/'
     list_of_df = dc.getWithAnomaly()
     ts = 1
-    data = pd.DataFrame([])
     for df in list_of_df:
         if df.shape[0] > 0:
-            pc = PCA(n_components=2).fit_transform(df)
+            data = df.drop(['anomaly', 'changepoint'], axis=1)
+            pc = PCA(n_components=2).fit_transform(data)
             df[['X', 'Y']] = pc
             plt.figure()
             sb.set(font='Times New Roman')
@@ -50,6 +52,12 @@ if exec_chart_anom:
 
 
 # isofh = IsolationForestHandler(dc)
-# isofh.findAnomalies()
+# isofh.findAnomalies(False)
+
+# knno = KNNOHandler(dc)
+# knno.findAnomalies(saveChart=True)
+
+lof = LOFHandler(dc)
+lof.findAnomalies(saveChart=True)
 
 
