@@ -6,6 +6,8 @@ from sklearn.decomposition import PCA
 from DataCollector import DataCollector
 from LOFHandler import LOFHandler
 from KNNOHandler import KNNOHandler
+from RobustCovHandler import RobustCovHandler
+from OneClassSVMHandler import OneClassSVMHandler
 from isolationForestHandler import IsolationForestHandler
 
 dc = DataCollector(False)
@@ -57,7 +59,13 @@ if exec_chart_anom:
 # knno = KNNOHandler(dc)
 # knno.findAnomalies(saveChart=True)
 
-lof = LOFHandler(dc)
-lof.findAnomalies(saveChart=True)
+# lof = LOFHandler(dc)
+# lof.findAnomalies(saveChart=True)
+
+# rocov = RobustCovHandler(dc)
+# rocov.findAnomalies(saveChart=True)
+
+ocsvm = OneClassSVMHandler(dc)
+ocsvm.findAnomalies(saveChart=True)
 
 
