@@ -11,7 +11,7 @@ class IsolationForestHandler:
 
     def __init__(self, dataCollector):
         self.dataCollector = dataCollector
-        if not os.path.isfile(self.path_to_plt):
+        if not os.path.exists(self.path_to_plt):
             os.mkdir(self.path_to_plt)
             os.mkdir(self.path_to_plt+'anom')
             os.mkdir(self.path_to_plt+'chart')
