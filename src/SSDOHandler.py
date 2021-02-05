@@ -49,7 +49,7 @@ class SSDOHandler:
                 csfont = {'fontname': 'Times New Roman'}
                 plt.xlabel('Time', **csfont)
                 plt.ylabel('Value', **csfont)
-                plt.title('ssdo On File [{}]'.format(i + 1), **csfont)
+                plt.title('SSDO On File [{}]'.format(i + 1), **csfont)
 
                 predicted_outlier[i].plot(figsize=(12, 6), label='predictions', marker='o', markersize=5)
                 true_outlier[i].plot(marker='o', markersize=2)
@@ -75,8 +75,7 @@ class SSDOHandler:
                 plt.figure()
                 sb.set(font='Times New Roman')
                 sns = sb.scatterplot(data=df, x='X', y='Y', hue='ssdo_anomaly', palette='bright')
-                sns.set_title('The Anomaly Detected By ssdo, File {}'.format(ts))
-                sns.set_title('The Anomaly Detected By ssdo, File {}'.format(ts))
+                sns.set_title('The Anomaly Detected By SSDO, File {}'.format(ts))
                 sns.figure.savefig(self.path_to_plt + 'chart/chart-{}.png'.format(ts))
                 plt.close('all')
                 print('The Chart of  File {} is Generated.'.format(ts))
