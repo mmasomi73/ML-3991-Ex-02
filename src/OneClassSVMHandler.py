@@ -8,6 +8,8 @@ from sklearn.decomposition import PCA
 from Evaluator import Evaluator
 import numpy as np
 
+from OutputWriter import OutputWriter
+
 
 class OneClassSVMHandler:
     path_to_plt = '../outs/charts/ocsvm/'
@@ -95,6 +97,18 @@ class OneClassSVMHandler:
 
             trainTime = np.array(self.en_tr_time).sum() - np.array(self.st_tr_time).sum()
             print(f'\t Train & Train Time {round(trainTime, 2)}s')
+
+            data = {'far': round(FP / (FP + TN) * 100, 2),
+                    'mar': round(FN / (FN + TP) * 100, 2),
+                    'acc': round((TP + TN) / (TP + TN + FN + TP) * 100, 2),
+                    'tr': trainTime,
+                    'te': 0,
+                    'tp': TP,
+                    'tn': TN,
+                    'fp': FP,
+                    'fn': FN}
+            output = OutputWriter(self.path_to_plt, 'OneClassSVM', data)
+            output.write()
 
     def trainTime(self):
         return np.array(self.en_tr_time).sum() - np.array(self.st_tr_time).sum()

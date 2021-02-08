@@ -8,6 +8,9 @@ from sklearn.ensemble import IsolationForest
 from Evaluator import Evaluator
 import numpy as np
 
+from OutputWriter import OutputWriter
+
+
 class IsolationForestHandler:
     path_to_plt = '../outs/charts/isolation_forest/'
 
@@ -99,6 +102,18 @@ class IsolationForestHandler:
             testTime = np.array(self.en_te_time).sum() - np.array(self.st_te_time).sum()
             print(f'\t Train Time {round(trainTime, 2)}s')
             print(f'\t Test Time {round(testTime, 2)}s')
+
+            data = {'far': round(FP / (FP + TN) * 100, 2),
+                    'mar': round(FN / (FN + TP) * 100, 2),
+                    'acc': round((TP + TN) / (TP + TN + FN + TP) * 100, 2),
+                    'tr': trainTime,
+                    'te': testTime,
+                    'tp': TP,
+                    'tn': TN,
+                    'fp': FP,
+                    'fn': FN}
+            output = OutputWriter(self.path_to_plt, 'ISO-FAR', data)
+            output.write()
 
     def trainTime(self):
         return np.array(self.en_tr_time).sum() - np.array(self.st_tr_time).sum()
