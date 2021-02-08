@@ -95,6 +95,8 @@ class KNNOHandler:
             TN = metrics['TN']
             FP = metrics['FP']
             FN = metrics['FN']
+            print('\n-----------------------------------------------------')
+            print('KNNO Outputs: ')
             print(f'\t False Alarm Rate: {round(FP / (FP + TN) * 100, 2)} %')
             print(f'\t Missing Alarm Rate: {round(FN / (FN + TP) * 100, 2)} %')
             print(f'\t Accuracy Rate: {round((TP + TN) / (TP + TN + FN + TP) * 100, 2)} %')
@@ -118,12 +120,9 @@ class KNNOHandler:
         return np.array(self.en_tr_time).sum() - np.array(self.st_tr_time).sum()
 
     def fit_predict(self, Xt):
-        self.st_tr_time = datetime.datetime.now().timestamp()
         tree = BallTree(Xt, leaf_size=16, metric='euclidean')
         D, _ = tree.query(Xt, k=self.k + 1)
-        self.en_tr_time = datetime.datetime.now().timestamp()
         # predict
-        self.st_te_time = datetime.datetime.now().timestamp()
         outlier_scores = D[:, -1].flatten()
         gamma = np.percentile(
             outlier_scores, int(100 * (1.0 - self.contamination))) + 1e-10
@@ -134,7 +133,6 @@ class KNNOHandler:
                 labels.append(1)
             else:
                 labels.append(0)
-        self.en_te_time = datetime.datetime.now().timestamp()
         return labels
 
     def _squashing_function(self, x, p):

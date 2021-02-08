@@ -18,8 +18,8 @@ class Executor:
     exec_chart_sec = False
     exec_chart_anom = False
 
-    def __init__(self):
-        self.dc = DataCollector(False)
+    def __init__(self, log):
+        self.dc = DataCollector(log)
 
     def drawCahrts(self):
         exec_chart_sec = False
@@ -87,3 +87,16 @@ class Executor:
     def SSkNNOExecutor(self):
         ssknno = SSkNNOHandler(self.dc)
         ssknno.findAnomalies(self.draw_chart, self.write_file)
+
+
+if __name__ == '__main__':
+    executor = Executor(False)
+    executor.write_file = True
+
+    executor.IsolationForestExecutor()
+    executor.KNNOExecutor()
+    executor.LOFExecutor()
+    executor.RobustCovExecutor()
+    executor.OneClassSVMExecutor()
+    executor.SSDOExecutor()
+    executor.SSkNNOExecutor()
