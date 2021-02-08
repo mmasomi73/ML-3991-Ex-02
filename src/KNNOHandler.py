@@ -7,7 +7,7 @@ import seaborn as sb
 from sklearn.decomposition import PCA
 from sklearn.neighbors import BallTree
 from Evaluator import Evaluator
-import numpy as np
+from tqdm import trange, tqdm
 
 from OutputWriter import OutputWriter
 
