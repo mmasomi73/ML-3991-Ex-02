@@ -9,6 +9,7 @@ from KNNOHandler import KNNOHandler
 from RobustCovHandler import RobustCovHandler
 from OneClassSVMHandler import OneClassSVMHandler
 from SSDOHandler import SSDOHandler
+from SSkNNOHandler import SSkNNOHandler
 from isolationForestHandler import IsolationForestHandler
 
 dc = DataCollector(False)
@@ -55,20 +56,23 @@ if exec_chart_anom:
 
 
 # isofh = IsolationForestHandler(dc)
-# isofh.findAnomalies(False)
+# isofh.findAnomalies(False, True)
 
 # knno = KNNOHandler(dc)
-# knno.findAnomalies(saveChart=True)
+# knno.findAnomalies(False, True)
 
 # lof = LOFHandler(dc)
-# lof.findAnomalies(saveChart=True)
+# lof.findAnomalies(False, True)
 
 # rocov = RobustCovHandler(dc)
-# rocov.findAnomalies(saveChart=True)
+# rocov.findAnomalies(False, True)
 
 # ocsvm = OneClassSVMHandler(dc)
-# ocsvm.findAnomalies(saveChart=True)
+# ocsvm.findAnomalies(False, True)
 
-ssdo = SSDOHandler(dc)
-ssdo.findAnomalies(saveChart=True)
+# ssdo = SSDOHandler(dc)
+# ssdo.findAnomalies(False, True)
+
+# ssknno = SSkNNOHandler(dc)
+# ssknno.findAnomalies(False, True)
 

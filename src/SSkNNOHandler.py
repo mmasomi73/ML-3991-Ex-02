@@ -1,16 +1,17 @@
 import os
+
 import datetime
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
 import seaborn as sb
+from anomatools.models import SSkNNO
 from sklearn.decomposition import PCA
-from anomatools.models import SSkNNO, SSDO
 from Evaluator import Evaluator
 import numpy as np
 
-class SSDOHandler:
-    path_to_plt = '../outs/charts/ssdo/'
+
+class SSkNNOHandler:
+    path_to_plt = '../outs/charts/ssknno/'
     contamination = 0.3
     k = 10
 
@@ -33,7 +34,7 @@ class SSDOHandler:
         for df in list_of_df:
             aida += 1
             if df.shape[0] > 0:
-                clf = SSDO()
+                clf = SSkNNO()
                 data = df.drop(['anomaly', 'changepoint'], axis=1)
                 self.st_tr_time.append(datetime.datetime.now().timestamp())
                 clf.fit(data)
@@ -46,9 +47,8 @@ class SSDOHandler:
                 self.en_te_time.append(datetime.datetime.now().timestamp())
                 # predicted outliers saving
                 predicted_outlier.append(prediction)
-                df['ssdo_anomaly'] = prediction
+                df['ssknno_anomaly'] = prediction
 
-        print(len(predicted_outlier))
         true_outlier = [df.anomaly for df in list_of_df]
         if saveChart:
             for i in range(len(predicted_outlier)):
@@ -58,7 +58,7 @@ class SSDOHandler:
                 csfont = {'fontname': 'Times New Roman'}
                 plt.xlabel('Time', **csfont)
                 plt.ylabel('Value', **csfont)
-                plt.title('SSDO On File [{}]'.format(i + 1), **csfont)
+                plt.title('SSkNNO On File [{}]'.format(i + 1), **csfont)
 
                 predicted_outlier[i].plot(figsize=(12, 6), label='predictions', marker='o', markersize=5)
                 true_outlier[i].plot(marker='o', markersize=2)
@@ -71,7 +71,7 @@ class SSDOHandler:
                 #             y=data[data['forest_anomaly'] != data['anomaly']]['anomaly'], label='False Prediction'
                 #             , c='r', zorder=5)
                 plt.legend(loc='upper right')
-                plt.savefig(self.path_to_plt + 'anom/ssdo-pre-{}.png'.format(i + 1), format='png')
+                plt.savefig(self.path_to_plt + 'anom/ssknno-pre-{}.png'.format(i + 1), format='png')
                 print('Chart {} is Generated'.format(i + 1))
                 plt.clf()
                 plt.close('all')
@@ -83,8 +83,8 @@ class SSDOHandler:
                 df[['X', 'Y']] = pc
                 plt.figure()
                 sb.set(font='Times New Roman')
-                sns = sb.scatterplot(data=df, x='X', y='Y', hue='ssdo_anomaly', palette='bright')
-                sns.set_title('The Anomaly Detected By SSDO, File {}'.format(ts))
+                sns = sb.scatterplot(data=df, x='X', y='Y', hue='ssknno_anomaly', palette='bright')
+                sns.set_title('The Anomaly Detected By SSkNNO, File {}'.format(ts))
                 sns.figure.savefig(self.path_to_plt + 'chart/chart-{}.png'.format(ts))
                 plt.close('all')
                 print('The Chart of  File {} is Generated.'.format(ts))
@@ -98,17 +98,17 @@ class SSDOHandler:
             FN = metrics['FN']
             print(f'\t False Alarm Rate: {round(FP / (FP + TN) * 100, 2)} %')
             print(f'\t Missing Alarm Rate: {round(FN / (FN + TP) * 100, 2)} %')
-            print(f'\t Accuracy Rate: {round((TP + TN) / (TP + TN + FN + TP) * 100, 2)} %')
+            print(f'\t Accuracy Rate: {round((TP+TN) / (TP + TN + FN + TP) * 100, 2)} %')
 
             trainTime = np.array(self.en_tr_time).sum() - np.array(self.st_tr_time).sum()
             testTime = np.array(self.en_te_time).sum() - np.array(self.st_te_time).sum()
             print(f'\t Train Time {round(trainTime, 2)}s')
             print(f'\t Test Time {round(testTime, 2)}s')
 
+
+
     def trainTime(self):
         return np.array(self.en_tr_time).sum() - np.array(self.st_tr_time).sum()
 
     def testTime(self):
         return np.array(self.en_te_time).sum() - np.array(self.st_te_time).sum()
-
-

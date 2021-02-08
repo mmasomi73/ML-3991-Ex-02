@@ -1,14 +1,22 @@
 import os
-
+import datetime
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sb
 from sklearn.covariance import EllipticEnvelope
 from sklearn.decomposition import PCA
+from Evaluator import Evaluator
+import numpy as np
 
 
 class RobustCovHandler:
     path_to_plt = '../outs/charts/rocov/'
+
+    st_tr_time = []
+    en_tr_time = []
+    st_te_time = []
+    en_te_time = []
+
 
     def __init__(self, dataCollector):
         self.dataCollector = dataCollector
@@ -17,7 +25,7 @@ class RobustCovHandler:
             os.mkdir(self.path_to_plt + 'anom')
             os.mkdir(self.path_to_plt + 'chart')
 
-    def findAnomalies(self, saveChart=False):
+    def findAnomalies(self, saveChart=False, saveEvaluation=False):
         outliers_fraction = 0.15
         clf = EllipticEnvelope(contamination=outliers_fraction)
         predicted_outlier = []
@@ -25,10 +33,12 @@ class RobustCovHandler:
         for df in list_of_df:
             if df.shape[0] > 0:
                 data = df.drop(['anomaly', 'changepoint'], axis=1)
+                self.st_tr_time.append(datetime.datetime.now().timestamp())
                 prediction = pd.Series(clf.fit_predict(data) * -1, index=df.index) \
                     .rolling(5) \
                     .median() \
                     .fillna(0).replace(-1, 0)
+                self.en_tr_time.append(datetime.datetime.now().timestamp())
                 # predicted outliers saving
                 predicted_outlier.append(prediction)
                 df['rocov_anomaly'] = prediction
@@ -72,3 +82,20 @@ class RobustCovHandler:
                 plt.close('all')
                 print('The Chart of  File {} is Generated.'.format(ts))
                 ts += 1
+        if saveEvaluation:
+            evaluator = Evaluator(true_outlier, predicted_outlier, metric='binary', numenta_time='30 sec')
+            metrics = evaluator.getConfusionMetrics()
+            TP = metrics['TP']
+            TN = metrics['TN']
+            FP = metrics['FP']
+            FN = metrics['FN']
+            print(f'\t False Alarm Rate: {round(FP / (FP + TN) * 100, 2)} %')
+            print(f'\t Missing Alarm Rate: {round(FN / (FN + TP) * 100, 2)} %')
+            print(f'\t Accuracy Rate: {round((TP + TN) / (TP + TN + FN + TP) * 100, 2)} %')
+
+            trainTime = np.array(self.en_tr_time).sum() - np.array(self.st_tr_time).sum()
+            print(f'\t Train & Train Time {round(trainTime, 2)}s')
+
+    def trainTime(self):
+        return np.array(self.en_tr_time).sum() - np.array(self.st_tr_time).sum()
+
