@@ -99,6 +99,8 @@ class SSDOHandler:
             TN = metrics['TN']
             FP = metrics['FP']
             FN = metrics['FN']
+            print('\n-----------------------------------------------------')
+            print('SSDO Outputs: ')
             print(f'\t False Alarm Rate: {round(FP / (FP + TN) * 100, 2)} %')
             print(f'\t Missing Alarm Rate: {round(FN / (FN + TP) * 100, 2)} %')
             print(f'\t Accuracy Rate: {round((TP + TN) / (TP + TN + FN + TP) * 100, 2)} %')
