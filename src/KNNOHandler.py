@@ -1,14 +1,14 @@
-import os
 import datetime
+import os
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sb
 from sklearn.decomposition import PCA
 from sklearn.neighbors import BallTree
-from Evaluator import Evaluator
-from tqdm import trange, tqdm
 
+from Evaluator import Evaluator
 from OutputWriter import OutputWriter
 
 
