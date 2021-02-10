@@ -22,6 +22,7 @@ Tested Algorithms:
 	5 | OCSVM
 	6 | SSDO
 	7 | SSKNNO
+Description Clip in[ Aparat](https://aparat.com/v/gXR9K)
 
   ----------------
 
