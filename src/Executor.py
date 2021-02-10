@@ -21,7 +21,7 @@ class Executor:
     def __init__(self, log):
         self.dc = DataCollector(log)
 
-    def drawCahrts(self):
+    def drawCharts(self):
         exec_chart_sec = False
         if exec_chart_sec:
             path_to_plt = '../outs/charts/main/'
