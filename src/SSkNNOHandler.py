@@ -102,7 +102,7 @@ class SSkNNOHandler:
             print('SSkNNO Outputs: ')
             print(f'\t False Alarm Rate: {round(FP / (FP + TN) * 100, 2)} %')
             print(f'\t Missing Alarm Rate: {round(FN / (FN + TP) * 100, 2)} %')
-            print(f'\t Accuracy Rate: {round((TP + TN) / (TP + TN + FN + TP) * 100, 2)} %')
+            print(f'\t Accuracy Rate: {round((TP + TN) / (TP + TN + FN + FP) * 100, 2)} %')
 
             trainTime = np.array(self.en_tr_time).sum() - np.array(self.st_tr_time).sum()
             testTime = np.array(self.en_te_time).sum() - np.array(self.st_te_time).sum()
@@ -111,7 +111,7 @@ class SSkNNOHandler:
 
             data = {'far': round(FP / (FP + TN) * 100, 2),
                     'mar': round(FN / (FN + TP) * 100, 2),
-                    'acc': round((TP + TN) / (TP + TN + FN + TP) * 100, 2),
+                    'acc': round((TP + TN) / (TP + TN + FN + FP) * 100, 2),
                     'tr': trainTime,
                     'te': testTime,
                     'tp': TP,
